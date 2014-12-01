@@ -11,10 +11,9 @@ public class TestGraph {
 	@Test
 	public void test() {
 		String fileName="a1.txt";
-		Graph graph=new Graph();
-		List<Vertex> vertexs=graph.getVertexs();
+		Graph graph=new Graph(fileName);
 		CreateGraph cg=new CreateGraph(graph);
-		cg.createGraphByFile(fileName);
+		List<Vertex> vertexs=graph.getVertexs();
 		List<Vertex> bfs=cg.BFS(vertexs.get(1));
 		for(Vertex n:bfs){
 			System.out.println("("+n.getP().x+", "+n.getP().y+")");
