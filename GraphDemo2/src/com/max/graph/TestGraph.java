@@ -12,7 +12,7 @@ public class TestGraph {
 	public void test() {
 		String fileName="a1.txt";
 		Graph graph=new Graph(fileName);
-		CreateGraph cg=new CreateGraph(graph);
+		GraphDao cg=new GraphDao(graph);
 		List<Vertex> vertexs=graph.getVertexs();
 		List<Vertex> bfs=cg.BFS(vertexs.get(1));
 		for(Vertex n:bfs){
