@@ -18,6 +18,10 @@ public class Edge {
 	public double getPheromoneLevel() {
 		return pheromoneLevel;
 	}
+	
+	public void setPheromoneLevel(double pheromoneLevel) {
+		this.pheromoneLevel = pheromoneLevel;
+	}
 	public Edge(Vertex source, Vertex destination, double weight) {
 		this.source = source;
 		this.destination = destination;

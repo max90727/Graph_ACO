@@ -13,8 +13,4 @@ public class Vertex {
 		return p;
 	}
 
-	
-
-	
-	
 }

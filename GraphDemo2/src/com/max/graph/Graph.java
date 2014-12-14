@@ -86,8 +86,12 @@ public class Graph {
 		} else {
 			destination = map.get(p2);
 		}
-		Edge edge = new Edge(source, destination, weight);
-		edges.add(edge);
+		Edge edge1 = new Edge(source, destination, weight);
+		edge1.setPheromoneLevel(0.1);
+		edges.add(edge1);
+		Edge edge2 = new Edge(destination,source , weight);
+		edge2.setPheromoneLevel(0.2);
+		edges.add(edge2);
 	}
 
 	// For the undirected graph get the adjacents whenever its from source or
@@ -98,9 +102,9 @@ public class Graph {
 			if (edge.getSource().equals(node)) {
 				neighborNodes.add(edge.getDestination());
 			}
-			if (edge.getDestination().equals(node)) {
-				neighborNodes.add(edge.getSource());
-			}
+//			if (edge.getDestination().equals(node)) {
+//				neighborNodes.add(edge.getSource());
+//			}
 		}
 		return neighborNodes;
 	}

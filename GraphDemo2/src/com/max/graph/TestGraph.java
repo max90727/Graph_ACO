@@ -14,10 +14,13 @@ public class TestGraph {
 		Graph graph=new Graph(fileName);
 		GraphDao cg=new GraphDao(graph);
 		List<Vertex> vertexs=graph.getVertexs();
-		List<Vertex> bfs=cg.BFS(vertexs.get(1));
-		for(Vertex n:bfs){
-			System.out.println("("+n.getP().x+", "+n.getP().y+")");
-		}
+//		List<Vertex> bfs=cg.BFS(vertexs.get(1));
+//		for(Vertex n:bfs){
+//			System.out.println("("+n.getP().x+", "+n.getP().y+")");
+//		}
+		Ant ant=new Ant(graph);
+		ant.randomSelect(vertexs.size());
+		ant.selectNext(1);
 	}
 
 }
