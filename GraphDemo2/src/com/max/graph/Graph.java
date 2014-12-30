@@ -1,5 +1,6 @@
 package com.max.graph;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,13 +8,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Graph {
 	private List<Vertex> vertexs;
 	private List<Edge> edges;
 	private String fileName;
 	private HashMap<Point2D.Double, Vertex> map;
+	private Set<Edge> setEdges;
 
 	public Graph(String fileName) {
 		vertexs = new ArrayList<Vertex>();
@@ -88,25 +92,66 @@ public class Graph {
 		}
 		Edge edge1 = new Edge(source, destination, weight);
 		edge1.setPheromoneLevel(0.1);
+		source.edges.add(edge1);
 		edges.add(edge1);
-		Edge edge2 = new Edge(destination,source , weight);
-		edge2.setPheromoneLevel(0.2);
+		Edge edge2 = new Edge(destination, source, weight);
+		edge2.setPheromoneLevel(0.1);
 		edges.add(edge2);
+		destination.edges.add(edge2);
 	}
 
-	// For the undirected graph get the adjacents whenever its from source or
-	// destination
-	public List<Vertex> getNeighbors(Vertex node) {
-		List<Vertex> neighborNodes = new ArrayList<Vertex>();
-		for (Edge edge : edges) {
-			if (edge.getSource().equals(node)) {
-				neighborNodes.add(edge.getDestination());
-			}
-//			if (edge.getDestination().equals(node)) {
-//				neighborNodes.add(edge.getSource());
-//			}
+	public void addLane2(Vertex source, Vertex destination) {
+		if(containEdges(source,destination)){
+			Edge edge1 = new Edge(source, destination, distance(source.getP(),
+					destination.getP()));
+			edge1.setPheromoneLevel(0.5);
+			source.edges.add(edge1);
+			edges.add(edge1);
+			setEdges.add(edge1);
 		}
-		return neighborNodes;
+		
+//		
+//		Edge edge2 = new Edge(destination, source, distance(source.getP(),
+//				destination.getP()));
+//		edge2.setPheromoneLevel(0.1);
+//		edges.add(edge2);
+//		destination.edges.add(edge2);
+
+	}
+	private boolean containEdges(Vertex v1, Vertex v2){
+		for(Edge e:edges){
+			if(e.getSource().equals(v1) && e.getDestination().equals(v2)){
+				return false;
+			}
+			if(e.getSource().equals(v2) && e.getDestination().equals(v1)){
+				return false;
+			}
+		}
+		return true;
+	}
+	public void createCompleteGraph() {
+		edges.clear();
+		setEdges = new HashSet<Edge>();
+		for (Vertex v1 : vertexs) {
+			for (Vertex v2 : vertexs) {
+				if (!v1.equals(v2)) {
+					// addLane(sourceX, sourceY, destX, destY, weight);
+					addLane2(v1, v2);
+				}
+			}
+		}
+	}
+
+	
+	private static double distance(Point2D.Double p1, Point2D.Double p2) {
+		double xDiff = p1.x - p2.x;
+		double xSqr = Math.pow(xDiff, 2);
+
+		double yDiff = p1.y - p1.y;
+		double ySqr = Math.pow(yDiff, 2);
+
+		double output = Math.sqrt(xSqr + ySqr);
+		return output;
 	}
 
 }

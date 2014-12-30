@@ -23,18 +23,16 @@ public class GraphDao{
 	public List<Vertex> BFS(Vertex root) {
 		// TODO Auto-generated method stub
 		List<Vertex> bfsResult = new ArrayList<Vertex>();
-		Set<Vertex> visited = new HashSet<Vertex>();
 		Queue<Vertex> q = new ConcurrentLinkedQueue<Vertex>();
 		q.add(root);
 		while (q.size() > 0) {
 			Vertex n = q.poll();
-			if (!visited.contains(n)) {
-				visited.add(n);
+			if (!n.visited) {
 				bfsResult.add(n);
-				List<Vertex> neighbors = graph.getNeighbors(n);
-				for (int i = 0; i < neighbors.size(); i++) {
-					q.add(neighbors.get(i));
-
+				n.visited=true;
+				List<Edge> adjEdges = n.edges;
+				for (int i = 0; i < adjEdges.size(); i++) {
+					q.add(adjEdges.get(i).getDestination());
 				}
 			}
 		}
