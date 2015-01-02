@@ -37,12 +37,12 @@ public class Ant {
 		Vertex current= tours.get(index-1);
 		List<Vertex> adjcents=new ArrayList<Vertex>();
 		double alpha = 1.0;
-		double beta = 2.0;
+		double beta = 5.0;
 		double sum = 0.0;
 		double[] p;
 		List<Edge> adjEdges = findAdjecent(current);
 		for (int i = 0; i < adjEdges.size(); i++) {
-			adjcents.add(adjEdges.get(i).getDestination()==current?adjEdges.get(i).getSource():adjEdges.get(i).getDestination());
+			adjcents.add(adjEdges.get(i).getv2()==current?adjEdges.get(i).getv1():adjEdges.get(i).getv2());
 		}
 		p = new double[adjcents.size()];
 		for (int i = 0; i < adjcents.size(); i++) {
@@ -87,11 +87,11 @@ public class Ant {
 	}
 	public void connectEdges(Vertex v1,Vertex v2){
 		for(Edge e:ACO.edges){
-			if(e.getSource().equals(v1) && e.getDestination().equals(v2)){
+			if(e.getv1().equals(v1) && e.getv2().equals(v2)){
 				pathEdges.add(e);
 				break;
 			}
-			if(e.getSource().equals(v2) && e.getDestination().equals(v1)){
+			if(e.getv1().equals(v2) && e.getv2().equals(v1)){
 				pathEdges.add(e);
 				break;
 			}
@@ -111,11 +111,11 @@ public class Ant {
 	public List<Edge> findAdjecent(Vertex v){
 		List<Edge> adjEdges=new ArrayList<Edge>();
 		for (Edge edge : ACO.edges) {
-			if (edge.getSource().equals(v) || edge.getDestination().equals(v)) {
-				//vertexs.add(edge.getDestination());
+			if (edge.getv1().equals(v) || edge.getv2().equals(v)) {
+				//vertexs.add(edge.getv2());
 				adjEdges.add(edge);
 			}
-			
+
 		}
 		return adjEdges;
 	}

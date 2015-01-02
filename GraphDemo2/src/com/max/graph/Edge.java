@@ -1,16 +1,19 @@
 package com.max.graph;
 
 public class Edge {
-	private Vertex source;
-	private Vertex destination;
+	private Vertex v1;
+	private Vertex v2;
 	private double weight;
 	private double pheromoneLevel;
-	public Vertex getSource() {
-		return source;
+	
+	public Vertex getv1() {
+		return v1;
 	}
-	public Vertex getDestination() {
-		return destination;
+
+	public Vertex getv2() {
+		return v2;
 	}
+
 	public double getWeight() {
 		return weight;
 	}
@@ -22,9 +25,9 @@ public class Edge {
 	public void setPheromoneLevel(double pheromoneLevel) {
 		this.pheromoneLevel = pheromoneLevel;
 	}
-	public Edge(Vertex source, Vertex destination, double weight) {
-		this.source = source;
-		this.destination = destination;
+	public Edge(Vertex v1, Vertex v2, double weight) {
+		this.v1 = v1;
+		this.v2 = v2;
 		this.weight = weight;
 	}
 	

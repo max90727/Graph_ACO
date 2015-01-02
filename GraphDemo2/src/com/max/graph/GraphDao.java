@@ -32,7 +32,7 @@ public class GraphDao{
 				n.visited=true;
 				List<Edge> adjEdges = n.edges;
 				for (int i = 0; i < adjEdges.size(); i++) {
-					q.add(adjEdges.get(i).getDestination());
+					q.add(adjEdges.get(i).getv2());
 				}
 			}
 		}

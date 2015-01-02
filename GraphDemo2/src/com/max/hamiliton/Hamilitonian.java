@@ -60,7 +60,7 @@ public class Hamilitonian {
 			List<Vertex> adjcents = new ArrayList<Vertex>();
 			List<Edge> adjEdges = current.getEdges();
 			for (int i = 0; i < adjEdges.size(); i++) {
-				adjcents.add(adjEdges.get(i).getDestination());
+				adjcents.add(adjEdges.get(i).getv2());
 			}
 			double alpha = 1.0;
 			double beta = 2.0;
@@ -97,14 +97,14 @@ public class Hamilitonian {
 			}
 			if (selectcity == -1) {
 				for (Edge e : tours.get(pathCount).getEdges()) {
-					if (visited.contains(e.getSource())) {
-						visited.remove(e.getSource());
-						tours.remove(e.getSource());
+					if (visited.contains(e.getv1())) {
+						visited.remove(e.getv1());
+						tours.remove(e.getv1());
 						pathCount--;
 					}
-					if (visited.contains(e.getDestination())) {
-						visited.remove(e.getDestination());
-						tours.remove(e.getDestination());
+					if (visited.contains(e.getv2())) {
+						visited.remove(e.getv2());
+						tours.remove(e.getv2());
 						pathCount--;
 					}
 
@@ -137,7 +137,7 @@ public class Hamilitonian {
 		List<Vertex> adjcents = new ArrayList<Vertex>();
 		List<Edge> adjEdges = source.getEdges();
 		for (int i = 0; i < adjEdges.size(); i++) {
-			adjcents.add(adjEdges.get(i).getDestination());
+			adjcents.add(adjEdges.get(i).getv2());
 		}
 		if (adjcents.contains(destination)) {
 			return true;

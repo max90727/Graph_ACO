@@ -120,10 +120,10 @@ public class Graph {
 	}
 	private boolean containEdges(Vertex v1, Vertex v2){
 		for(Edge e:edges){
-			if(e.getSource().equals(v1) && e.getDestination().equals(v2)){
+			if(e.getv1().equals(v1) && e.getv2().equals(v2)){
 				return false;
 			}
-			if(e.getSource().equals(v2) && e.getDestination().equals(v1)){
+			if(e.getv1().equals(v2) && e.getv2().equals(v1)){
 				return false;
 			}
 		}
