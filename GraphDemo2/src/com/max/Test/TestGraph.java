@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.max.graph.ACO;
 import com.max.graph.Edge;
+import com.max.graph.GUI;
 import com.max.graph.Graph;
-import com.max.gui.GUI;
 import com.max.hamiliton.Hamilitonian;
 
 public class TestGraph {

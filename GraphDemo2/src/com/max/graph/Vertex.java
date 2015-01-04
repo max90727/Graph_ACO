@@ -8,7 +8,7 @@ public class Vertex {
 	ArrayList<Edge> edges;
 	boolean visited;
 
-	Vertex(double x, double y){
+	public Vertex(double x, double y){
 		p=new Point2D.Double(x,y);
 		this.edges = new ArrayList<Edge>();
 		this.visited = false; 
@@ -20,6 +20,10 @@ public class Vertex {
 
 	public ArrayList<Edge> getEdges() {
 		return edges;
+	}
+
+	public void setP(double x, double y) {
+		p=new Point2D.Double(x,y);
 	}
 	
 }

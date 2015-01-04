@@ -7,97 +7,115 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import com.max.gui.GUI;
-
 public class ACO {
-	//Graph informations
+	// Graph informations
 	Graph graph;
 	static List<Vertex> vertexs;
 	static List<Edge> edges;
-	
-	//ACO parameters
-	Ant []ants;
-	int antnumber;
-	int citycount;
-	int bestLength;
-	//Draw lines on GUI
+
+	// ACO parameters
+	Ant[] ants;
+	private int antnumber;
+	private int citycount;
+	private int bestLength;
+	private int epoch;
+	List<Vertex> bestTour;
+	// Draw lines on GUI
 	JPanel canvas;
-	public ACO(Graph graph,JPanel canvas) {
+	private double alpha;
+	private double beta;
+
+	public ACO(Graph graph, JPanel canvas, double alpha, double beta,
+			int antnumber) {
 		this.graph = graph;
-		vertexs=graph.getVertexs();
-		edges=graph.getEdges();
-		citycount=vertexs.size();
-		this.canvas=canvas;
+		vertexs = graph.getVertexs();
+		edges = graph.getEdges();
+		citycount = vertexs.size();
+		this.canvas = canvas;
+		this.antnumber = antnumber;
+		//this.bestTour = new ArrayList<Vertex>();
+		this.epoch = 0;
 	}
-	
-	public void init(int antnum) {
+
+	public ACO(Graph graph, int antnumber) {
+		this.graph = graph;
+		vertexs = graph.getVertexs();
+		edges = graph.getEdges();
+		citycount = vertexs.size();
+		this.antnumber = antnumber;
+		this.epoch = 0;
+	}
+
+	public void init(double pher) {
 		// TODO Auto-generated method stub
-		//citycount=vertexs.size();
-		antnumber=antnum;
+		for (Edge e : edges) {
+			e.setPheromoneLevel(pher);
+		}
 		ants = new Ant[antnumber];
-		for(int i=0;i<antnumber;i++){
-            ants[i]=new Ant();
-        }
-		bestLength=Integer.MAX_VALUE;
-	}
-	
-	public void run(int maxgen){
-		List<Vertex> bestTour=new ArrayList<Vertex>();
-		for (int runtimes = 0; runtimes < maxgen; runtimes++) {
-			for (int i = 0; i < antnumber; i++) {
-				ants[i].randomSelect(citycount);	
-			}
-			for (int i = 0; i < antnumber; i++) {
-				for (int j = 1; j < citycount; j++) {
-					ants[i].selectNext(j);
-				}
-				ants[i].calTourLength();
-				if (ants[i].tourlength < bestLength) {
-					bestLength = ants[i].tourlength;
-					bestTour = ants[i].tours;
-					drawGui(bestTour);
-				}
-			}
-			System.out.println("The "+(runtimes+1)+"th time."+"The best length is:" + bestLength);
-			update();
+		for (int i = 0; i < antnumber; i++) {
+			ants[i] = new Ant(alpha, beta);
+//			ants[i].randomSelect(citycount);
 		}
-		printBestTour(bestTour);
-	}
-	
-	public void drawGui(List<Vertex> bestTour) {
-		// TODO Auto-generated method stub
-		int scale = 6;
-		Graphics graphics= canvas.getGraphics();
-		graphics.setColor(Color.black);
-		 for (Vertex n : vertexs) {
-	            for (Edge edge : n.getEdges()) {
-	            	graphics.drawLine((int) (n.getP().x + 10)*scale, (int) (n.getP().y + 5) *scale, (int) (edge.getv2().getP().x + 10)*scale, (int) (edge.getv2().getP().y + 5)*scale);
-	            }
-	        }
-		graphics.setColor(Color.red);
-		for(int i=0;i<bestTour.size()-1;i++){
-			graphics.drawLine((int) (bestTour.get(i).getP().x + 10)*scale, (int) (bestTour.get(i).getP().y + 5) *scale, (int) (bestTour.get(i+1).getP().x + 10)*scale, (int) (bestTour.get(i+1).getP().y + 5)*scale);
-		}
+		bestLength = Integer.MAX_VALUE;
+		bestTour = new ArrayList<Vertex>(citycount+1);
 	}
 
-	private void printBestTour(List<Vertex> bestTour) {
-		// TODO Auto-generated method stub
-		System.out.println("The best tours are: ");
-		for(Vertex v:bestTour){
-			System.out.println("("+v.getP().x+","+v.getP().y+") ");
+	public void run() {
+		// for (int runtimes = 0; runtimes < maxgen; runtimes++) {
+		for (int i = 0; i < antnumber; i++) {
+			ants[i].randomSelect(citycount);
 		}
+		for (int i = 0; i < antnumber; i++) {
+			for (int j = 1; j < citycount; j++) {
+				ants[i].selectNext(j);
+			}
+			ants[i].calTourLength();
+			if (ants[i].tourlength < bestLength) {
+				bestLength = ants[i].tourlength;
+				bestTour = new ArrayList<Vertex>();
+				for(int k=0;k<ants[i].tours.size();k++){
+					bestTour.add(ants[i].tours.get(k));
+				}
+				//bestTour = ants[i].tours;
+			}
+		}
+		update();
 		
+		epoch++;
+		// }
 	}
 
-	public void update(){
-		for(Edge e:edges){
-			e.setPheromoneLevel(e.getPheromoneLevel()*(1-0.8));
+	public void update() {
+		for (Edge e : edges) {
+			e.setPheromoneLevel(e.getPheromoneLevel() * (1 - 0.5));
 		}
-		for(int i=0;i<antnumber;i++){
-			for(int j=0;j<vertexs.size();j++){
-				ants[i].pathEdges.get(j).setPheromoneLevel(ants[i].pathEdges.get(j).getPheromoneLevel()+1.0/ants[i].tourlength);
+		for (int i = 0; i < antnumber; i++) {
+			for (int j = 0; j < vertexs.size(); j++) {
+				ants[i].pathEdges.get(j).setPheromoneLevel(
+						ants[i].pathEdges.get(j).getPheromoneLevel() + 1.0
+								/ ants[i].tourlength);
 			}
 		}
 	}
-	
+
+	public void setAlpha(double alpha) {
+		this.alpha = alpha;
+	}
+
+	public void setBeta(double beta) {
+		this.beta = beta;
+	}
+
+	public List<Vertex> getBestTour() {
+		return bestTour;
+	}
+
+	public int getBestLength() {
+		return bestLength;
+	}
+
+	public int getEpoch() {
+		return epoch;
+	}
+
 }

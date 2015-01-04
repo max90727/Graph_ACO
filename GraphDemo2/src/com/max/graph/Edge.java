@@ -5,7 +5,7 @@ public class Edge {
 	private Vertex v2;
 	private double weight;
 	private double pheromoneLevel;
-	
+	private int color;
 	public Vertex getv1() {
 		return v1;
 	}
@@ -29,6 +29,14 @@ public class Edge {
 		this.v1 = v1;
 		this.v2 = v2;
 		this.weight = weight;
+	}
+
+	public int getColor() {
+		return color;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
 	}
 	
 }

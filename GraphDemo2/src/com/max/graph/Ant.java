@@ -10,19 +10,24 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Ant {
-	List<Vertex> tours;//
+	protected List<Vertex> tours;//
 	List<Edge> pathEdges;
 	int tourlength;
 	private Set<Vertex> visited;
-	//private Queue<Vertex> visiteQueue;
-	public Ant() {
+	double alpha;
+	double beta;
+
+	// private Queue<Vertex> visiteQueue;
+	public Ant(double alpha, double beta) {
 		this.tours = new ArrayList<Vertex>();
 		this.visited = new HashSet<Vertex>();
 		this.pathEdges = new ArrayList<Edge>();
+		this.alpha = alpha;
+		this.beta = beta;
 	}
 
 	public void randomSelect(int num) {
-		tourlength=0;
+		tourlength = 0;
 		visited.clear();
 		tours.clear();
 		pathEdges.clear();
@@ -34,15 +39,14 @@ public class Ant {
 	}
 
 	public void selectNext(int index) {
-		Vertex current= tours.get(index-1);
-		List<Vertex> adjcents=new ArrayList<Vertex>();
-		double alpha = 1.0;
-		double beta = 5.0;
+		Vertex current = tours.get(index - 1);
+		List<Vertex> adjcents = new ArrayList<Vertex>();
 		double sum = 0.0;
 		double[] p;
 		List<Edge> adjEdges = findAdjecent(current);
 		for (int i = 0; i < adjEdges.size(); i++) {
-			adjcents.add(adjEdges.get(i).getv2()==current?adjEdges.get(i).getv1():adjEdges.get(i).getv2());
+			adjcents.add(adjEdges.get(i).getv2() == current ? adjEdges.get(i)
+					.getv1() : adjEdges.get(i).getv2());
 		}
 		p = new double[adjcents.size()];
 		for (int i = 0; i < adjcents.size(); i++) {
@@ -71,52 +75,67 @@ public class Ant {
 				break;
 			}
 		}
-		if (selectcity == -1){
-			//Do something here!!!!
-			System.out.println("");    
-			
+		if (selectcity == -1) {
+			// Do something here!!!!
+			System.out.println("");
+
 		}
 		tours.add(adjcents.get(selectcity));
 		visited.add(adjcents.get(selectcity));
-		
+
 		connectEdges(current, adjcents.get(selectcity));
-		//Connect to the first vertext
-		if(index==ACO.vertexs.size()-1){
+		// Connect to the first vertext
+		if (index == ACO.vertexs.size()-1) {
+			tours.add(tours.get(0));
 			connectEdges(adjcents.get(selectcity), tours.get(0));
 		}
 	}
-	public void connectEdges(Vertex v1,Vertex v2){
-		for(Edge e:ACO.edges){
-			if(e.getv1().equals(v1) && e.getv2().equals(v2)){
+
+	public void connectEdges(Vertex v1, Vertex v2) {
+		for (Edge e : ACO.edges) {
+			if (e.getv1().equals(v1) && e.getv2().equals(v2)) {
 				pathEdges.add(e);
 				break;
 			}
-			if(e.getv1().equals(v2) && e.getv2().equals(v1)){
+			if (e.getv1().equals(v2) && e.getv2().equals(v1)) {
 				pathEdges.add(e);
 				break;
 			}
 		}
 	}
+
 	public void calTourLength() {
-		tourlength=0;
-		for(Edge e:pathEdges){
-			tourlength+=e.getWeight();
+		tourlength = 0;
+		for (Edge e : pathEdges) {
+			tourlength += e.getWeight();
 		}
 	}
-	public void refesh(){
+
+	public void refesh() {
 		tours.clear();
 		pathEdges.clear();
 		visited.clear();
 	}
-	public List<Edge> findAdjecent(Vertex v){
-		List<Edge> adjEdges=new ArrayList<Edge>();
+
+	public List<Edge> findAdjecent(Vertex v) {
+		List<Edge> adjEdges = new ArrayList<Edge>();
 		for (Edge edge : ACO.edges) {
 			if (edge.getv1().equals(v) || edge.getv2().equals(v)) {
-				//vertexs.add(edge.getv2());
+				// vertexs.add(edge.getv2());
 				adjEdges.add(edge);
 			}
 
 		}
 		return adjEdges;
+	}
+
+	public void leaveOneClear(){
+		Vertex vertex=tours.get(0);
+		tours.clear();
+		tours.add(vertex);
+		visited.clear();
+		visited.add(vertex);
+		tourlength = 0;
+		pathEdges.clear();
 	}
 }
